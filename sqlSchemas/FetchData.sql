@@ -1,5 +1,5 @@
-DECLARE @underlying varchar(100) = 'NIFTY',
-@optionType varchar(2) = 'CE', 
+DECLARE @underlying varchar(100) = 'AXISBANK',
+@optionType varchar(2) = 'PE', 
 @expiryDate date = '2020-07-30'
 
 if OBJECT_ID('tempdb..#topOption') is not null DROP TABLE tempdb..#topOption

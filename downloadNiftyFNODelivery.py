@@ -1,14 +1,17 @@
 import requests,csv,json
 import constants
 from datetime import date
+import datetime
 import pandas as pd
 import pyodbc
 import csv
+import sys
+import getopt
 
 def downloadNifty50DeliveryInfo(date):
     print ('downloading file for the date %s', date)
     deliveryUrl = "https://archives.nseindia.com/products/content/sec_bhavdata_full_" + date + ".csv"
-
+  
     fileName = './files/nifty50_delivery.csv'
     
     r = requests.get(deliveryUrl)
@@ -53,14 +56,30 @@ def saveNiftyFNOStocksToDb(deliveryfile):
     cursor.close()
     connection.close()   
      
-    
-def run():
-    dateRange = pd.bdate_range(start='1/1/2020', end='02/23/2020',  freq='C', weekmask = "Mon Tue Wed Thu Fri", holidays=constants.NIFTY_HOLIDAY_CALENDAR)
+def completeRun():
+    dateRange = pd.bdate_range(start='1/1/2020', end='12/31/2020',  freq='C', weekmask = "Mon Tue Wed Thu Fri", holidays=constants.NIFTY_HOLIDAY_CALENDAR)
     for tradeDate in dateRange:
-        print tradeDate
-        deliveryFile = downloadNifty50DeliveryInfo(tradeDate.strftime("%d%m%Y"));
-        saveNiftyFNOStocksToDb(deliveryFile);
-    #saveNiftyFNOStocksToDb('./files/nifty50_delivery.csv'); 
+        past = datetime.strptime(tradeDate, "%d/%m/%Y")
+        present = datetime.now()
+        if past.date() <= present.date():
+            dateRun(tradeDate)
+
+def todayRun():    
+    dateRun(date.today().strftime("%d%m%y"))
+    
+def dateRun(tradeDate):      
+    deliveryFile = downloadNifty50DeliveryInfo(tradeDate);
+    saveNiftyFNOStocksToDb(deliveryFile);
 
 if __name__ == '__main__':
-    run()
+    opts, args = getopt.getopt(sys.argv[1:], "hctd:", ["ddate="])
+    for opt, arg in opts:
+        if opt == '-h':
+            print "downloadNiftyFnoDelivery.py -c -t -d. -c : to run the complete range from start of the year to present day"
+            sys.exit()
+        elif opt in ("-c"):
+            completeRun()
+        elif opt in ("-t"):
+            todayRun()
+        elif opt in ("-d"):
+            dateRun(arg)

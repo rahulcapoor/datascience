@@ -30,7 +30,7 @@ def readJsonFromFile(file_path):
   
         
 def saveValuesToDb(connection, optionStrike, optionType):
-    try:       
+    try:
         if optionStrike['openInterest'] > 0 :
             SQLCommand = ("INSERT INTO [dbo].[OptionChain]           ([underlying]           ,[strikePrice]           ,[expiryDate]           ,[DownloadDate]           ,[OptionType]           ,[identifier]           ,[openInterest]           ,[changeinOpenInterest]           ,[pchangeinOpenInterest]           ,[totalTradedVolume]           ,[impliedVolatility]           ,[lastPrice]           ,[change]           ,[pChange]           ,[totalBuyQuantity]           ,[totalSellQuantity]           ,[bidQty]           ,[bidprice]           ,[askQty]           ,[askPrice]           ,[underlyingValue])     VALUES           ('{}',{},'{}','{}','{}',  '{}',{},{},{},{}, {},{},{},{},{}, {},{},{},{},{},{})")           
                 
@@ -64,8 +64,8 @@ def readFromTable():
         print('row = %r' % (row,))
     
 if __name__ == '__main__':
-    #for stock in constants.NIFTY_FNO_FILE_NAMES.keys():
-    #    readJsonFromFile(constants.NIFTY_FNO_FILE_NAMES[stock])          
+    for stock in constants.NIFTY_FNO_FILE_NAMES.keys():
+        readJsonFromFile(constants.NIFTY_FNO_FILE_NAMES[stock])          
     readJsonFromFile('nifty50.json')
     readJsonFromFile('banknifty.json')
    
