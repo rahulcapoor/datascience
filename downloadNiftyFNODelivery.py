@@ -9,9 +9,9 @@ import sys
 import getopt
 
 def downloadNifty50DeliveryInfo(date):
-    print ('downloading file for the date %s', date)
+    print ('downloading file for the date: ', date)
     deliveryUrl = "https://archives.nseindia.com/products/content/sec_bhavdata_full_" + date + ".csv"
-  
+    print deliveryUrl
     fileName = './files/nifty50_delivery.csv'
     
     r = requests.get(deliveryUrl)
